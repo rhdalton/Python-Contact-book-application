@@ -9,6 +9,7 @@ Contacts are referenced by unique ID to avoid conflicts with contacts with same 
 ![alt text](https://raw.githubusercontent.com/rhdalton/Python-Contact-book-application/master/assets/contactlist2.png)
 
 TODO:
+- add alert notifications for add, edit, delete actions
 - field validation and normalization (email, phone number)
 - quit button
 

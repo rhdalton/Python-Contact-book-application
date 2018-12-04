@@ -65,14 +65,14 @@ def create_db():
                     "col_lname TEXT,"
                     "col_email TEXT,"
                     "col_phone TEXT,"
-                    "col_address TEXT);")
+                    "col_address TEXT)")
         conn.commit()
     conn.close()
     first_run()
 
 
 def first_run():
-    data1 = ('John', 'Doe', 'john@mail.com', '123-456-7890', '123 Main St.',)
+    test_user = ('John', 'Doe', 'john@mail.com', '123-456-7890', '123 Main St.',)
     conn = db_conn()
     with conn:
         cur = conn.cursor()
@@ -80,7 +80,7 @@ def first_run():
         if count < 1:
             cur.execute("""INSERT INTO tbl_contactlist (col_fname, col_lname, col_email, col_phone, col_address)
                         VALUES (?, ?, ?, ?, ?)""",
-                        data1)
+                        test_user)
             conn.commit()
     conn.close()
 

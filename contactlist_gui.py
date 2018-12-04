@@ -8,7 +8,7 @@ def load_gui(app, window):
     tk.Label(window, text="First Name")\
         .grid(row=0, column=0, sticky=W)
 
-    # create a hidden entry field to keep the ID of each contactlist entry
+    # create a hidden entry field to store the ID of each contactlist entry
     tk.Entry(window, text=app.text_id, width=0) \
         .grid(row=1, column=0)
     # put the First name entry field on top of the ID field
