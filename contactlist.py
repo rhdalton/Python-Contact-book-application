@@ -4,21 +4,22 @@ import contactlist_func
 
 
 class AppWindow(Frame):
-    def __init__(self, app):
-        Frame.__init__(self)
+    def __init__(self, app, *args, **kwargs):
+        Frame.__init__(self, *args, **kwargs)
+        self.app = app
 
-        app.option_add("*font", "Helvetica 10")
-        app.resizable(width=False, height=False)
+        self.app.option_add("*font", "Helvetica 10")
+        self.app.resizable(width=False, height=False)
         # TODO: add center_window function
         # contactlist_func.center_window(app, 500, 300)
-        app.geometry('{}x{}'.format(500, 300))
+        self.app.geometry('{}x{}'.format(500, 300))
 
-        app.title('Python Contact Book')
-        app.iconbitmap(self, default="assets/contactlist.ico")
+        self.app.title('Python Contact Book')
+        self.app.iconbitmap(self.app, default="assets/contactlist.ico")
 
         # create an outer frame with padding around window to put all other content
-        container = Frame(app)
-        container.grid(row=0, column=0, padx=25, pady=10)
+        self.container = Frame(self.app)
+        self.container.grid(row=0, column=0, padx=25, pady=10)
 
         # define tkinter string vars for form fields
         self.text_id = StringVar()
@@ -37,12 +38,11 @@ class AppWindow(Frame):
         self.contactlist_fields.append(self.text_phone_number)
         self.contactlist_fields.append(self.text_address)
 
-        # set contactlist lists for displaying contacts
-        self.contactlist_entry_names = []
-        self.contactlist_entry_ids = []
+        # set contactlist list for displaying contacts
+        self.contactlist_list = []
 
         # load GUI into container Frame
-        contactlist_gui.load_gui(self, container)
+        contactlist_gui.load_gui(self, self.container)
 
         # load database and populate contact list
         contactlist_func.create_db()

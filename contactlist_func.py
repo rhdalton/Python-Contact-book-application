@@ -9,9 +9,12 @@ def db_conn():
 
 
 def add_person(app):
+    # return if first name or last name empty
+    # TODO: add alert to notify first, last name required
     if app.text_first_name.get() == "" or app.text_last_name.get() == "":
         return
 
+    # put input fields into tuple
     insert_row = (app.text_first_name.get(), app.text_last_name.get(), app.text_email.get(),
                   app.text_phone_number.get(), app.text_address.get())
     conn = db_conn()
@@ -30,7 +33,7 @@ def edit_person(app):
     if app.text_first_name.get() == "" or app.text_last_name.get() == "":
         return
     update_row = (app.text_first_name.get(), app.text_last_name.get(), app.text_email.get(),
-                  app.text_phone_number.get(), app.text_address.get(), app.text_id.get(),)
+                  app.text_phone_number.get(), app.text_address.get(), app.text_id.get())
     conn = db_conn()
     with conn:
         cur = conn.cursor()
@@ -92,8 +95,8 @@ def count_records(cur):
 
 
 def load_contactlist(app):
-    app.contactlist_entry_names = []
-    app.contactlist_entry_ids = []
+    # clear contact list
+    app.contactlist_list.clear()
     conn = db_conn()
     with conn:
         cur = conn.cursor()
@@ -101,38 +104,22 @@ def load_contactlist(app):
         rows = cur.fetchall()
     conn.close()
     for row in rows:
-        app.contactlist_entry_names.append(row[1] + " " + row[2])
-        app.contactlist_entry_ids.append(row[0])
+        # put each ID and name into tuple and add to contactlist list
+        app.contactlist_list.append((row[0], row[1] + " " + row[2]))
     print_contactlist(app)
 
 
 def print_contactlist(app):
     app.contactlist_box.delete(0, END)
-    if app.contactlist_entry_names:
-
-        # code below is for when you want to re-sort the list of names in contactlist before printing them in listbox
-        # however we are sorting by last name from the SQL query, so the name list doesn't need to be sorted again.
-        '''
-        temp_entry_ids = []
-        for v in app.contactlist_entry_ids:
-            temp_entry_ids.append(v)
-
-        sorted_ids = sorted(range(len(app.contactlist_entry_names)),
-                            key=lambda k: app.contactlist_entry_names[k].split()[1])
-        app.contactlist_entry_names = sorted(app.contactlist_entry_names, key=lambda n: n.split()[1])
-
-        for i, v in enumerate(sorted_ids):
-            app.contactlist_entry_ids[i] = temp_entry_ids[v]
-        '''
-
+    if app.contactlist_list:
         # put name list into listbox
-        for i, n in enumerate(app.contactlist_entry_names):
-            app.contactlist_box.insert(i, n)
+        for i, n in enumerate(app.contactlist_list):
+            app.contactlist_box.insert(i, n[1])
 
 
 def select_entry(app):
     index = app.contactlist_box.curselection()[0]
-    query_id = (app.contactlist_entry_ids[index],)
+    query_id = (app.contactlist_list[index][0],)
     conn = db_conn()
     with conn:
         cur = conn.cursor()

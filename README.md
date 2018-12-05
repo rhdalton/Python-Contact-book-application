@@ -12,5 +12,6 @@ TODO:
 - add alert notifications for add, edit, delete actions
 - field validation and normalization (email, phone number)
 - quit button
+- search names in contact list
 
 Possible features to add are searching contacts, adding additional fields for home/cell phone numbers.
