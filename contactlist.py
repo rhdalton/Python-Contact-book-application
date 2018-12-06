@@ -42,7 +42,7 @@ class AppWindow(Frame):
         self.contactlist_list = []
 
         # load GUI into container Frame
-        contactlist_gui.load_gui(self, self.container)
+        contactlist_gui.load_gui(self)
 
         # load database and populate contact list
         contactlist_func.create_db()
