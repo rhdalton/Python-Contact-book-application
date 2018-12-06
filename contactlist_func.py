@@ -20,9 +20,9 @@ def add_person(app):
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("""INSERT INTO tbl_contactlist (col_fname, col_lname, col_email, col_phone, col_address)
-                        VALUES (?, ?, ?, ?, ?)""",
-                    insert_row)
+        sql_query = "INSERT INTO tbl_contactlist (col_fname, col_lname, col_email, col_phone, col_address)"\
+                    "VALUES (?, ?, ?, ?, ?)"
+        cur.execute(sql_query, insert_row)
         conn.commit()
     conn.close()
     clear_form_fields(app)
@@ -37,9 +37,9 @@ def edit_person(app):
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("""UPDATE tbl_contactlist SET col_fname=?, col_lname=?, col_email=?, col_phone=?, col_address=?
-                        WHERE ID=?""",
-                    update_row)
+        sql_query = "UPDATE tbl_contactlist SET col_fname=?, col_lname=?, col_email=?, col_phone=?, col_address=?"\
+                    "WHERE ID=?"
+        cur.execute(sql_query, update_row)
         conn.commit()
     conn.close()
     clear_form(app)
@@ -51,7 +51,8 @@ def delete_person(app):
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("""DELETE FROM tbl_contactlist WHERE ID=?""", delete_row)
+        sql_query = "DELETE FROM tbl_contactlist WHERE ID=?"
+        cur.execute(sql_query, delete_row)
         conn.commit()
     conn.close()
     clear_form(app)
@@ -62,13 +63,14 @@ def create_db():
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("CREATE TABLE IF NOT EXISTS tbl_contactlist ("
-                    "ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "col_fname TEXT,"
-                    "col_lname TEXT,"
-                    "col_email TEXT,"
-                    "col_phone TEXT,"
-                    "col_address TEXT)")
+        sql_query = "CREATE TABLE IF NOT EXISTS tbl_contactlist ("\
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT,"\
+                    "col_fname TEXT,"\
+                    "col_lname TEXT,"\
+                    "col_email TEXT,"\
+                    "col_phone TEXT,"\
+                    "col_address TEXT)"
+        cur.execute(sql_query)
         conn.commit()
     conn.close()
     first_run()
@@ -81,15 +83,16 @@ def first_run():
         cur = conn.cursor()
         cur, count = count_records(cur)
         if count < 1:
-            cur.execute("""INSERT INTO tbl_contactlist (col_fname, col_lname, col_email, col_phone, col_address)
-                        VALUES (?, ?, ?, ?, ?)""",
-                        test_user)
+            sql_query = "INSERT INTO tbl_contactlist (col_fname, col_lname, col_email, col_phone, col_address)"\
+                        "VALUES (?, ?, ?, ?, ?)"
+            cur.execute(sql_query, test_user)
             conn.commit()
     conn.close()
 
 
 def count_records(cur):
-    cur.execute("SELECT COUNT(*) FROM tbl_contactlist")
+    sql_query = "SELECT COUNT(*) FROM tbl_contactlist"
+    cur.execute(sql_query)
     count = cur.fetchone()[0]
     return cur, count
 
@@ -100,7 +103,8 @@ def load_contactlist(app):
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT ID, col_fname, col_lname FROM tbl_contactlist ORDER BY LOWER(col_lname) ASC")
+        sql_query = "SELECT ID, col_fname, col_lname FROM tbl_contactlist ORDER BY LOWER(col_lname) ASC"
+        cur.execute(sql_query)
         rows = cur.fetchall()
     conn.close()
     for row in rows:
@@ -123,7 +127,8 @@ def select_entry(app):
     conn = db_conn()
     with conn:
         cur = conn.cursor()
-        cur.execute("SELECT * FROM tbl_contactlist WHERE ID = ?", query_id)
+        sql_query = "SELECT * FROM tbl_contactlist WHERE ID = ?"
+        cur.execute(sql_query, query_id)
         entry = cur.fetchone()
     conn.close()
     for i in range(len(app.contactlist_fields)):
