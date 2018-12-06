@@ -123,17 +123,22 @@ def print_contactlist(app):
 
 def select_entry(app):
     index = app.contactlist_box.curselection()[0]
-    query_id = (app.contactlist_list[index][0],)
-    conn = db_conn()
-    with conn:
-        cur = conn.cursor()
-        sql_query = "SELECT * FROM tbl_contactlist WHERE ID = ?"
-        cur.execute(sql_query, query_id)
-        entry = cur.fetchone()
-    conn.close()
-    for i in range(len(app.contactlist_fields)):
-        app.contactlist_fields[i].set(entry[i])
-    set_action_buttons(app, False)
+    print(str(index) + ", " + str(app.active_contactbox_index))
+    # check if selected index is not already active
+    # if already active, then no need to do everything below
+    if index != app.active_contactbox_index:
+        app.active_contactbox_index = index
+        query_id = (app.contactlist_list[index][0],)
+        conn = db_conn()
+        with conn:
+            cur = conn.cursor()
+            sql_query = "SELECT * FROM tbl_contactlist WHERE ID = ?"
+            cur.execute(sql_query, query_id)
+            entry = cur.fetchone()
+        conn.close()
+        for i in range(len(app.contactlist_fields)):
+            app.contactlist_fields[i].set(entry[i])
+        set_action_buttons(app, False)
 
 
 def clear_form(app):
@@ -141,6 +146,7 @@ def clear_form(app):
     set_action_buttons(app)
     app.action_frame.focus()
     app.contactlist_box.selection_clear(0, END)
+    app.active_contactbox_index = -1
 
 
 def clear_form_fields(app):

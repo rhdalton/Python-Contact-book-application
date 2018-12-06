@@ -40,6 +40,8 @@ class AppWindow(Frame):
 
         # set contactlist list for displaying contacts
         self.contactlist_list = []
+        # set active index to -1
+        self.active_contactbox_index = -1
 
         # load GUI into container Frame
         contactlist_gui.load_gui(self)
